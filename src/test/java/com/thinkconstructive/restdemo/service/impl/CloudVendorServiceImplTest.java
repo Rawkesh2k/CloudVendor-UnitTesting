@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -52,7 +54,7 @@ class CloudVendorServiceImplTest {
     }
 
     @Test
-    void updateCloudVendor() {
+    void testUpdateCloudVendor() {
         mock(CloudVendorRepository.class);
         mock(CloudVendor.class);
         when(cloudVendorRepository.save(cloudVendor)).thenReturn(cloudVendor);
@@ -61,11 +63,11 @@ class CloudVendorServiceImplTest {
     }
 
     @Test
-    void deleteCloudVendor() {
+    void testDeleteCloudVendor() {
     }
 
     @Test
-    void getCloudVendor() {
+    void testGetCloudVendor() {
         mock(CloudVendorRepository.class);
         mock(CloudVendor.class);
         when(cloudVendorRepository.findById("1"))
@@ -77,10 +79,17 @@ class CloudVendorServiceImplTest {
     }
 
     @Test
-    void getAllCloudVendors() {
+    void testGetAllCloudVendors() {
     }
 
     @Test
-    void getByVendorName() {
+    void testGetByVendorName() {
+        mock(CloudVendorRepository.class);
+        mock(CloudVendor.class);
+        when(cloudVendorRepository.findByVendorName("Amazon"))
+                .thenReturn(new ArrayList<CloudVendor>(Collections.singleton(cloudVendor)));
+        assertThat(cloudVendorService.getByVendorName("Amazon").get(0).getVendorId())
+                .isEqualTo(cloudVendor.getVendorId());
+
     }
 }
