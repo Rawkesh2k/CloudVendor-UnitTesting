@@ -1,5 +1,9 @@
 package com.thinkconstructive.restdemo.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.thinkconstructive.restdemo.model.CloudVendor;
 import com.thinkconstructive.restdemo.service.CloudVendorService;
 import org.junit.jupiter.api.AfterEach;
@@ -11,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -68,14 +73,44 @@ class CloudVendorControllerTest {
     }
 
     @Test
-    void testCreateCloudVendorDetails() {
+    void testCreateCloudVendorDetails() throws Exception {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+
+        ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
+        String requestJson = objectWriter.writeValueAsString(cloudVendor1);
+
+        when(cloudVendorService.createCloudVendor(cloudVendor1))
+                .thenReturn("Success");
+        this.mockMvc.perform(post("/cloudVendor/").contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andDo(print())
+                .andExpect(status().isOk());
+
     }
 
     @Test
-    void testUpdateCloudVendorDetails() {
+    void testUpdateCloudVendorDetails() throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+
+        ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
+        String requestJson = objectWriter.writeValueAsString(cloudVendor1);
+
+        when(cloudVendorService.updateCloudVendor(cloudVendor1))
+                .thenReturn("Success");
+        this.mockMvc.perform(put("/cloudVendor/").contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
     @Test
-    void testDeleteCloudVendorDetails() {
+    void testDeleteCloudVendorDetails() throws Exception {
+        when(cloudVendorService.deleteCloudVendor("1"))
+                .thenReturn("Success");
+        this.mockMvc.perform(delete("/cloudVendor/1"))
+                .andDo(print()).andExpect(status().isOk());
     }
 }

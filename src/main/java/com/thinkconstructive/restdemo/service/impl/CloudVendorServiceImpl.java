@@ -32,7 +32,7 @@ public class CloudVendorServiceImpl implements CloudVendorService {
     }
 
     @Override
-    public String deleteCloudVendor(String cloudVendorId) {
+    public String   deleteCloudVendor(String cloudVendorId) {
         // More Business Logic
         cloudVendorRepository.deleteById(cloudVendorId);
         return "Success";
